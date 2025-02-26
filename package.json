@@ -1,5 +1,5 @@
 {
-  "name": "@tw/mcp-server-triplewhale",
+  "name": "@triplewhale/mcp-server-triplewhale",
   "version": "0.0.1",
   "description": "MCP server for interacting with Triplewhale API",
   "license": "MIT",
