@@ -172,6 +172,8 @@ components:
 - If the API returns \`403 Unauthorized\`, inform the user: "Invalid credentials. Please check your settings."
 - If the \`shopId\` is missing, prompt the user to enter it.
 - For other errors, respond with: "Something went wrong. Please try again later."
+
+If the API return 401 it means the API key is invalid, this means the api ket doesn't have access to the shop so just say that api key is expired or doesn't have access to the shop.
   </error_handling>
         
         
