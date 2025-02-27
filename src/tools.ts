@@ -1,16 +1,16 @@
-import {server, TRIPLEWHALE_API_KEY} from './index.js';
+import { server, TRIPLEWHALE_API_KEY } from './index.js';
 import crypto from 'crypto';
-import {mobyInputSchema} from './toolsSchema.js';
-import {ToolCallback} from '@modelcontextprotocol/sdk/server/mcp.js';
-import axios from "axios";
-import chalk from "chalk";
+import { mobyInputSchema } from './toolsSchema.js';
+import { ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
+import axios from 'axios';
+import chalk from 'chalk';
 
 
 // Define the tools with their configurations
 export const TRIPLEWHALE_TOOLS = [
-    {
-        name: 'moby' as const,
-        description: `
+  {
+    name: 'moby' as const,
+    description: `
           <background>
   moby tool helps users access e-commerce performance data.
   the tool prompts the user to enter their **shopId**, which is then used for tool as input, shopId is must for this tool.
@@ -154,19 +154,6 @@ components:
   </response-handling>
 
 
-  <example>
-    For a migration like:
-    ALTER TABLE users ADD COLUMN last_login TIMESTAMP;
-    
-    You should test it with:
-    SELECT column_name, data_type 
-    FROM information_schema.columns 
-    WHERE table_name = 'users' AND column_name = 'last_login';
-    
-    You can use 'run_sql' to test the migration in the temporary branch that this
-    tool creates.
-  </example>
-
   <error_handling>
  - If \`isError: true\`, display the error message to the user.
 - If the API returns \`403 Unauthorized\`, inform the user: "Invalid credentials. Please check your settings."
@@ -175,52 +162,50 @@ components:
 
 If the API return 401 it means the API key is invalid, this means the api ket doesn't have access to the shop so just say that api key is expired or doesn't have access to the shop.
   </error_handling>
-        
-        
         `,
-        inputSchema: mobyInputSchema,
-        mime_type: "application/json",
-    },
+    inputSchema: mobyInputSchema,
+    mime_type: 'application/json'
+  }
 ];
 
 // Extract the tool names as a union type
 type TriplewhaleToolName = typeof TRIPLEWHALE_TOOLS[number]['name'];
 
 export type ToolHandler<T extends TriplewhaleToolName> = ToolCallback<{
-    params: Extract<typeof TRIPLEWHALE_TOOLS[number], { name: T }>['inputSchema']
+  params: Extract<typeof TRIPLEWHALE_TOOLS[number], { name: T }>['inputSchema']
 }>;
 
 // Create a type for the tool handlers that directly maps each tool to its appropriate input schema
 type ToolHandlers = {
-    [K in TriplewhaleToolName]: ToolHandler<K>
+  [K in TriplewhaleToolName]: ToolHandler<K>
 };
 
 
 const handleMoby = async (params: { question: string, shopId: string }) => {
-    const {question, shopId} = params;
+  const { question, shopId } = params;
 
-    const response = await axios.post('https://api.triplewhale.com/willy/moby-chat', {
-        source: "orcabase",
-        question,
-        shopId,
-    }, {
-        headers: {
-            'x-api-key': TRIPLEWHALE_API_KEY
-        }
-    });
-    return response.data
-}
+  const response = await axios.post('https://api.triplewhale.com/willy/moby-chat', {
+    source: 'orcabase',
+    question,
+    shopId
+  }, {
+    headers: {
+      'x-api-key': TRIPLEWHALE_API_KEY
+    }
+  });
+  return response.data;
+};
 
 export const TRIPLEWHALE_HANDLERS = {
 
-    moby: async ({params}) => {
+  moby: async ({ params }) => {
 
 
-        const response = await handleMoby(params);
+    const response = await handleMoby(params);
 
-        return {
-            content: [{type: 'text', text: JSON.stringify(response, null, 2)}],
-        };
-    }
+    return {
+      content: [{ type: 'text', text: JSON.stringify(response, null, 2) }]
+    };
+  }
 
 } satisfies ToolHandlers;
