@@ -31,7 +31,7 @@ npx -y @smithery/cli install triplewhale --client claude
 
 ## How to use locally
 
-1. Run `npx @triplewhale/mcp-server-triplewhale init $TRIPLEWHALE_API_KEY`
+1. Run `npx -y @triplewhale/mcp-server-triplewhale init $TRIPLEWHALE_API_KEY`
 2. Restart Claude Desktop
 3. You should now be able to try a simple command such as `what's my meta spend in the last 7 days?`
 
