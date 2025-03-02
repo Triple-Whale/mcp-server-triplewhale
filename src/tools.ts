@@ -71,7 +71,7 @@ components:
       properties:
         shopId:
           type: string
-          description: Shopify store ID
+          description: store ID
           example: example-store.com
         question:
           type: string
