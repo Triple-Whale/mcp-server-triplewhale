@@ -184,8 +184,7 @@ type ToolHandlers = {
 const handleMoby = async (params: { question: string, shopId: string }) => {
   const { question, shopId } = params;
 
-  const response = await axios.post('https://api.triplewhale.com/willy/moby-chat', {
-    source: 'orcabase',
+  const response = await axios.post('https://api.triplewhale.com/api/v2/orcabase/api/moby', {
     question,
     shopId
   }, {
